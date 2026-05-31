@@ -1,4 +1,4 @@
-# Brochure Generator
+# brochure-generator
 
 An AI-powered tool that automatically generates a professional company brochure by scraping a website and using OpenAI's GPT model to summarize relevant content for prospective clients, investors, and recruits.
 
@@ -9,25 +9,22 @@ An AI-powered tool that automatically generates a professional company brochure 
 3. Uses GPT to identify relevant pages (About, Careers, Company pages)
 4. Fetches content from those relevant pages
 5. Generates a polished markdown brochure using GPT
-6. Streams the output word by word in real time (like ChatGPT)
+6. Streams the output word by word in real time via a Gradio UI
 
 ## Tech Stack
 
 - Python
-- OpenAI API (GPT-4o-mini)
+- OpenAI API (gpt-5-nano)
+- Gradio
 - Jupyter Notebook
-- `requests` + `BeautifulSoup` for web scraping
-- `python-dotenv` for API key management
+- requests + BeautifulSoup for web scraping
+- python-dotenv for API key management
 
 ## Project Structure
-
-```
 brochure-generator/
-├── brochure.ipynb       # Main notebook
-├── scraper.py           # Website scraping utilities
-├── .env                 # API keys (not committed)
+├── brochure.ipynb    # Main notebook
+├── .env              # API keys (not committed)
 └── README.md
-```
 
 ## Setup
 
@@ -39,29 +36,26 @@ cd brochure-generator
 
 2. Install dependencies
 ```bash
-uv init
-uv add openai python-dotenv requests beautifulsoup4
+uv add openai gradio python-dotenv requests beautifulsoup4
 ```
 
 3. Add your OpenAI API key to a `.env` file
-```
 OPENAI_API_KEY=sk-proj-your-key-here
-```
 
 4. Run the notebook in Jupyter or Cursor
 
 ## Usage
 
 ```python
-# Basic brochure (waits for full response)
-create_brochure("Anthropic", "https://www.anthropic.com/")
-
-# Streaming brochure (word by word output)
+# Streaming brochure in notebook
 stream_brochure("Anthropic", "https://www.anthropic.com/")
+
+# Or use the Gradio UI — enter company name and URL, get brochure streamed in markdown
 ```
 
 ## Key Concepts
 
 - **Link filtering** — GPT filters out irrelevant links (Terms of Service, Privacy, emails) and keeps only brochure-relevant pages
 - **Structured JSON output** — `response_format={"type": "json_object"}` forces GPT to return valid JSON for link selection
-- **Streaming** — uses `stream=True` with `update_display()` to render output progressively in Jupyter
+- **Streaming** — uses `stream=True` with `yield` to render output progressively
+- **Gradio UI** — `gr.Interface` with a Markdown output component renders the brochure with full formatting
